@@ -1,10 +1,7 @@
 package guru.springframework.sfgpetclinic.bootstrap;
 
 import guru.springframework.sfgpetclinic.model.*;
-import guru.springframework.sfgpetclinic.services.OwnerService;
-import guru.springframework.sfgpetclinic.services.PetTypeService;
-import guru.springframework.sfgpetclinic.services.SpecialityService;
-import guru.springframework.sfgpetclinic.services.VetService;
+import guru.springframework.sfgpetclinic.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +14,14 @@ public class DataLoader implements CommandLineRunner {
     private final VetService vetService;
     private final PetTypeService petTypeService;
     private final SpecialityService specialityService;
+    private final VisitService visitService;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialityService specialityService) {
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialityService specialityService, VisitService visitService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
         this.specialityService = specialityService;
+        this.visitService = visitService;
     }
 
     @Override
@@ -77,10 +76,18 @@ public class DataLoader implements CommandLineRunner {
         ownersPet2.setPetType(savedDogPetType);
         ownersPet2.setOwner(owner1);
         ownersPet2.setBirthDate(LocalDate.now());
-        ownersPet2.setName("Rosco");
+        ownersPet2.setName("Bosco");
         owner2.getPets().add(ownersPet2);
 
         ownerService.save(owner2);
+
+        Visit visit1 = new Visit();
+        visit1.setPet(ownersPet1);
+        visit1.setLocalDate(LocalDate.now());
+        visit1.setDescription("Sneezy Dog");
+
+        visitService.save(visit1);
+
         System.out.println("--------------Loaded Owners....");
 
         Vet vet1 = new Vet();
